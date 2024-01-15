@@ -27,7 +27,7 @@ public:
             targets = {-0.50, -0.08, 0.30};
         }
         else if (scene_number_ == 2){
-            targets = {-0.50, -0.08};
+            targets = {-0.235167, -0.54000};
         }
         else{
             RCLCPP_INFO(get_logger(), "Invalid Scene Number");
