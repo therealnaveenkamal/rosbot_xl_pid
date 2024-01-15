@@ -10,7 +10,7 @@
 
 class TurnController : public rclcpp::Node {
 public:
-    TurnController() : Node("turn_controller") {
+    TurnController(int scene_number) : Node("turn_controller"), scene_number_(scene_number) {
         pub_ = create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 10);
         sub_ = create_subscription<nav_msgs::msg::Odometry>("/rosbot_xl_base_controller/odom", 10, std::bind(&TurnController::odomCallback, this, std::placeholders::_1));
         //rclcpp::sleep_for(std::chrono::seconds(3));
@@ -23,7 +23,16 @@ public:
         integral_ = 0.0;
         prev_error_ = 0.0;
 
-        targets = {-0.50, -0.08, 0.30};
+        if(scene_number_ == 1){
+            targets = {-0.50, -0.08, 0.30};
+        }
+        else if (scene_number_ == 2){
+            targets = {-0.50, -0.08};
+        }
+        else{
+            RCLCPP_INFO(get_logger(), "Invalid Scene Number");
+            rclcpp::shutdown();
+        }
 
 
     }
@@ -102,14 +111,19 @@ private:
 
     double integral_;
     double prev_error_;
-
     double derivative;
     double control_signal;
+
+    int scene_number_;
 };
 
+
 int main(int argc, char **argv) {
-    rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<TurnController>());
-    rclcpp::shutdown();
-    return 0;
+  rclcpp::init(argc, argv);
+  int scene_number = 1;
+  if (argc > 1) {
+    scene_number = std::atoi(argv[1]);
+  }
+  rclcpp::spin(std::make_shared<TurnController>(scene_number));
+  rclcpp::shutdown();
 }
