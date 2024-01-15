@@ -46,6 +46,7 @@ private:
 
             integral_ += error;
             derivative = error - prev_error_;
+            prev_error_ = error;
 
 
             twist_msg.linear.x = kp_ * error + ki_ * integral_ + kd_ * derivative;
@@ -126,3 +127,4 @@ int main(int argc, char **argv) {
     rclcpp::shutdown();
     return 0;
 }
+
