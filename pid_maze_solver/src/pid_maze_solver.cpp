@@ -14,7 +14,7 @@ public:
         pub_ = create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 10);
         sub_ = create_subscription<nav_msgs::msg::Odometry>("/rosbot_xl_base_controller/odom", 10, std::bind(&PIDMazeSolver::odomCallback, this, std::placeholders::_1));
         //rclcpp::sleep_for(std::chrono::seconds(3));
-        //timer1 = this->create_wall_timer(std::chrono::milliseconds(10), std::bind(&PIDMazeSolver::timerCallback1, this));
+        timer1 = this->create_wall_timer(std::chrono::milliseconds(10), std::bind(&PIDMazeSolver::timerCallback1, this));
         count = 0;
 
         kp_ = 2.0;
@@ -133,7 +133,7 @@ private:
 
 
     void odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg) {
-        RCLCPP_INFO(get_logger(), "x: %f, y: %f, z: %f", msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z);
+        //RCLCPP_INFO(get_logger(), "x: %f, y: %f, z: %f", msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z);
         //RCLCPP_INFO(get_logger(), "x: %f, y: %f, z: %f, w: %f", msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, msg->pose.pose.orientation.z, msg->pose.pose.orientation.w);
 
         curr_x = msg->pose.pose.position.x;
@@ -151,7 +151,7 @@ private:
         m.getRPY(roll, pitch, yaw);
 
         phi = yaw;
-        RCLCPP_INFO(get_logger(), "R: %f, P:%f, ANGLE: %f", roll, pitch, yaw);
+        //RCLCPP_INFO(get_logger(), "R: %f, P:%f, ANGLE: %f", roll, pitch, yaw);
     }
 
 
